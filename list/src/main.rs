@@ -1,7 +1,6 @@
 
-const MAX_SIZE: u8 = 3; // Max size of list
-
 struct Job {
+    job_id: u32,
     title: String,
     hourly: f32,
     applied: bool,
@@ -9,8 +8,9 @@ struct Job {
 
 impl Job {
     // Constructor:
-    pub fn new(title: String, hourly: f32) -> Self {
+    pub fn new(job_id: u32, title: String, hourly: f32) -> Self {
         Self {
+            job_id,
             title,
             hourly,
             applied: false,
@@ -19,8 +19,8 @@ impl Job {
 
     // Display job info:
     pub fn display(&self) -> () {
-        println!("Title: {}. Pay: {}. Applied: {}", 
-        self.title, self.hourly, self.applied);
+        println!("Job ID: {}. Title: {}. Pay: {}. Applied: {}", 
+        self.job_id, self.title, self.hourly, self.applied);
     }
 
     // Update application status:
@@ -29,25 +29,40 @@ impl Job {
     }
 }
 
-fn main() {
+// Holds a list of jobs:
+struct Applications {
+    jobs: Vec<Job>,
+    total_jobs: u32, // How many jobs are in the app
+}
 
-    let mut job1 = Job::new("Tutor".to_string(), 17.25);
-    job1.applied(true);
-
-    // Create a list of ints:
-    let mut list: Vec<Job> = Vec::new();
-
-    // Add items at the end of the list:
-    list.push(job1);
-    list.push(Job::new("Bus Driver".to_string(), 30.0));
-
-    // Check the length of list:
-    if list.len() > 5 {
-        println!("Cannot exceed {} items.", MAX_SIZE);
-    } else {
-        // Traverse the list and print each item:
-        for job in list {
-            job.display(); 
+impl Applications {
+    // Construct a new application:
+    pub fn new() -> Self {
+        Self {
+            jobs: Vec::new(),
+            total_jobs: 0,
         }
     }
+
+    pub fn add_job(&mut self, job: Job) {
+        self.jobs.push(job);
+        self.total_jobs += 1;
+    }
+
+    pub fn view_apps(self) {
+        for job in self.jobs {
+            job.display();
+        }
+    }
+}
+
+fn main() {
+
+    let mut apps = Applications::new();
+    
+    let mut job1 = Job::new(1, "Bus Driver".to_string(), 30.0);
+    apps.add_job(job1);
+    apps.add_job(Job::new(2, "Tutor".to_string(), 17.25));
+
+    apps.view_apps();
 }
