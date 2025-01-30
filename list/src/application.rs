@@ -5,11 +5,10 @@
   */
 
 use std::io; // To get user input for app
-//use job;
-//mod job;
-use crate::job::Job;
+use crate::job::Job; // To use the job.rs methods module
 
 // Holds a list of jobs:
+//#[derive(Copy)] // Allows copies of struct objects
 pub struct Applications {
     jobs: Vec<Job>,
     total_jobs: u32, // How many jobs are in the app
@@ -65,9 +64,11 @@ impl Applications {
     }
 
     // Loop through jobs list and display each job:
-    pub fn view_apps(self) {
-        for job in self.jobs {
-            job.display();
+    pub fn view_apps(&mut self) -> String {
+        let mut data: String = "".to_string();
+        for job in &self.jobs {
+            data += &(job.display() + "\n");
         }
+        data
     }
 }

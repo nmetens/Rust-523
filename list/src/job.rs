@@ -6,6 +6,7 @@
 // a job_title, an hourly rate,
 // and whether the user has applied
 // to the job or not.
+//#[derive(Copy, Clone)] // Allows copies of struct objects
 pub struct Job {
     job_id: u32,
     title: String,
@@ -25,9 +26,11 @@ impl Job {
     }
 
     // Display job info:
-    pub fn display(&self) -> () {
-        println!("Job ID: {}. Title: {}. Pay: {}. Applied: {}", 
-        self.job_id, self.title, self.hourly, self.applied);
+    pub fn display(&self) -> String {
+        //println!("Job ID: {}. Title: {}. Pay: {}. Applied: {}", 
+        //self.job_id, self.title, self.hourly, self.applied);
+        format!("Job ID: {0}. Title: {1}. Pay: {2}. Applied: {3}", 
+        self.job_id, self.title, self.hourly, self.applied).to_string() // Return the String
     }
 
     // Update application status:
