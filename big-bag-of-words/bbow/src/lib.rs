@@ -44,14 +44,16 @@ fn is_word(word: &str) -> bool {
 // Also check of words have appostraphies and don't cound them:
 // Example: "aren't" and "don't" and "ain't" are not words.
 //fn parse_word(word: &str) -> &str {
-fn parse_word(word: &str) -> String{
+fn parse_word(word: &str) -> String {
     if !word.ends_with(|c: char| c.is_alphabetic()) && !word.contains('\'') {
-        return word.trim_end_matches(|c: char| !c.is_alphabetic()).to_string();
+        return word
+            .trim_end_matches(|c: char| !c.is_alphabetic())
+            .to_string();
     }
     "".to_string()
 }
 
-fn has_uppercase(word: &str) -> bool {
+fn _has_uppercase(word: &str) -> bool {
     word.chars().any(char::is_uppercase)
 }
 
@@ -80,9 +82,10 @@ impl<'a> Bbow<'a> {
         // Vector holding words (bag of words ==> bow):
         let mut bow: Vec<Cow<'a, str>> = vec![];
 
-        for word in target.split_whitespace() { // Check words in the target sentence
-            if is_word(word) { 
-               bow.push(Cow::Borrowed(word));
+        for word in target.split_whitespace() {
+            // Check words in the target sentence
+            if is_word(word) {
+                bow.push(Cow::Borrowed(word));
             } else {
                 bow.push(Cow::Owned(parse_word(word)));
             }
@@ -90,15 +93,15 @@ impl<'a> Bbow<'a> {
 
         // Using functional programming, check if a word in the vector has
         // an uppercase letter and if so, change it to a lowercase:
-        bow.iter_mut().for_each(|word| *word = Cow::Owned(word.to_lowercase()));
+        bow.iter_mut()
+            .for_each(|word| *word = Cow::Owned(word.to_lowercase()));
 
         // Remove all empty strings returned from the parse_words method:
-        bow.retain(|word| !word.is_empty()); 
+        bow.retain(|word| !word.is_empty());
 
         // Loop through bow and add each word to Bbow:
-        for i in 0..bow.len() {
-            println!("{}", bow[i]);
-            let count = self.0.entry(bow[i].clone()).or_insert(0);
+        for word in &bow {
+            let count = self.0.entry(word.clone()).or_insert(0);
             *count += 1;
         }
 
@@ -122,7 +125,7 @@ impl<'a> Bbow<'a> {
     pub fn match_count(&self, keyword: &str) -> usize {
         // Self.0 accesses the only elem in the struct Bbow (the BTreeMap).
         // BTreeMap get() method (https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.get) returns an Option<>.
-        // Cow::Borrowed(keyword) Holds the borrowed referenve of the &str keyword.
+        // Cow::Borrowed(keyword) Holds the borrowed reference of the &str keyword.
         // &Cow::Borrowed(keyword) means we are referencing a borrwed &str
         // self.0.get(&Cow::Borrowed(keyword)) is an Option<>, so we use
         // unwrap_or(&0) to return either the count of the keyword if it exists, or
@@ -152,7 +155,7 @@ impl<'a> Bbow<'a> {
 
         // Loop through the BTreeMap elements and count each occurance of
         // all the words and add them to the total_words var:
-        for (word, total) in &self.0 {
+        for total in self.0.values() {
             total_words += total;
         }
         total_words // Return the count
@@ -170,16 +173,15 @@ impl<'a> Bbow<'a> {
     /// assert_eq!(2, bbow.len());
     /// ```
     pub fn len(&self) -> usize {
-        self.0.len() 
+        self.0.len() // Get length of BTree
     }
 
     /// Is this BBOW empty?
     pub fn is_empty(&self) -> bool {
-        todo!()
+        if self.0.len() == 0 {
+            // Check len
+            return true; // There are words
+        }
+        false // No words
     }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*; // Bring all other scoped data into testing
 }
