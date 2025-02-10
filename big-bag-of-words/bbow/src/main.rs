@@ -14,4 +14,6 @@ fn main() {
     println!("The word '{}' appears {} times in the target.", key, bbow.match_count(key));
 
     println!("There are {} total words in the bbow.", bbow.count());
+
+    println!("There are a total of {} unique words in the bbow.", bbow.len());
 }

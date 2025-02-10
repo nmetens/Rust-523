@@ -170,7 +170,7 @@ impl<'a> Bbow<'a> {
     /// assert_eq!(2, bbow.len());
     /// ```
     pub fn len(&self) -> usize {
-        todo!()
+        self.0.len() 
     }
 
     /// Is this BBOW empty?
