@@ -12,4 +12,6 @@ fn main() {
 
     let key: &str = "hello";
     println!("The word '{}' appears {} times in the target.", key, bbow.match_count(key));
+
+    println!("There are {} total words in the bbow.", bbow.count());
 }

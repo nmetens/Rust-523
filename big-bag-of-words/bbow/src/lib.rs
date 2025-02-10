@@ -147,7 +147,15 @@ impl<'a> Bbow<'a> {
     /// assert_eq!(3, bbow.count());
     /// ```
     pub fn count(&self) -> usize {
-        todo!()
+        // Create a total_words count variable:
+        let mut total_words: usize = 0;
+
+        // Loop through the BTreeMap elements and count each occurance of
+        // all the words and add them to the total_words var:
+        for (word, total) in &self.0 {
+            total_words += total;
+        }
+        total_words // Return the count
     }
 
     /// Count the number of unique words contained in this BBOW,
