@@ -9,4 +9,7 @@ fn main() {
     let bbow = Bbow::new().extend_from_text(target);
     
     println!("The bbow: {:?}", bbow);
+
+    let key: &str = "hello";
+    println!("The word '{}' appears {} times in the target.", key, bbow.match_count(key));
 }

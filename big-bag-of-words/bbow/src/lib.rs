@@ -120,7 +120,15 @@ impl<'a> Bbow<'a> {
     /// assert_eq!(3, bbow.match_count("b"));
     /// ```
     pub fn match_count(&self, keyword: &str) -> usize {
-        todo!()
+        // Self.0 accesses the only elem in the struct Bbow (the BTreeMap).
+        // BTreeMap get() method (https://doc.rust-lang.org/std/collections/struct.BTreeMap.html#method.get) returns an Option<>.
+        // Cow::Borrowed(keyword) Holds the borrowed referenve of the &str keyword.
+        // &Cow::Borrowed(keyword) means we are referencing a borrwed &str
+        // self.0.get(&Cow::Borrowed(keyword)) is an Option<>, so we use
+        // unwrap_or(&0) to return either the count of the keyword if it exists, or
+        // 0 is it doesn't exist in the BTreeMap.
+        // And we derefence the entire expression with the '*':
+        *self.0.get(&Cow::Borrowed(keyword)).unwrap_or(&0)
     }
 
     pub fn words(&'a self) -> impl Iterator<Item = &'a str> {
@@ -163,4 +171,7 @@ impl<'a> Bbow<'a> {
     }
 }
 
-fn main() {}
+#[cfg(test)]
+mod tests {
+    use super::*; // Bring all other scoped data into testing
+}
